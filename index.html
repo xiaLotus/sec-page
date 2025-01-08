@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Page</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Welcome to Index Page</h1>
+        <input v-model="username" placeholder="Enter your username">
+        <button @click="login">Login</button>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    username: ''
+                };
+            },
+            methods: {
+                async login() {
+                    console.log(this.username);
+                    // 發送 POST 請求到後端
+                    const response = await fetch('http://127.0.0.1:5000/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username: this.username })
+                    });
+
+                    if (response.ok) {
+                        // 將帳號存儲到 localStorage
+                        localStorage.setItem('username', this.username);
+                        // 跳轉到 dashboard.html
+                        window.location.href = 'dashboard.html';
+                    }
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
